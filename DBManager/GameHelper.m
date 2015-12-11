@@ -10,6 +10,13 @@
 
 @implementation GameHelper
 @synthesize delegate;
+/*!
+ *  @author Satyendra
+ *
+ *  @brief  shareInstance is singleton method of this class
+ *
+ *  @return <#return value description#>
+ */
 +(id)shareInstance{
     static dispatch_once_t once;
     static id sharedInstance;
@@ -21,12 +28,25 @@
     [sharedInstance getAllWords];
     return sharedInstance;
 }
-
+/*!
+ *  @author Satyendra
+ *
+ *  @brief  this mehtod will initialize when instance of its class will created.
+ */
 -(void)getAllWords{
    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"WordCollection.sqlite"];
     NSString *query = @"select * from tblWords";
     self.arrayAllWords = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
 }
+/*!
+ *  @author Satyendra
+ *
+ *  @brief  this method will check every time that if there is any matching word in database or not when player select any word from grid
+ *
+ *  @param strWord select world
+ *
+ *  @return if matched then yes else no
+ */
 -(BOOL)matchWord:(NSString *)strWord{
     BOOL isMatched=YES;
     NSPredicate *pre=[NSPredicate predicateWithFormat:@"wordname BEGINSWITH[c] %@",[strWord lowercaseString]];
@@ -52,6 +72,15 @@
     return isMatched;
     
 }
+/*!
+ *  @author Satyendra
+ *
+ *  @brief  validate method is validate grid that if the grid contain at least one matching word from database
+ *
+ *  @param allCharecters alphabets
+ *
+ *  @return if grid is valid then return yes else no
+ */
 -(BOOL)validate:(NSString *)allCharecters{
     
     BOOL isValidated=NO;
